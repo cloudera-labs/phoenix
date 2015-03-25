@@ -1,9 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.cloudera.cdh</groupId>
+    <artifactId>cdh-root</artifactId>
+    <version>5.4.0</version>
+    <relativePath/>
+  </parent>
   <groupId>org.apache.phoenix</groupId>
   <artifactId>phoenix</artifactId>
-  <version>4.3.0</version>
+  <version>4.3.0-cdh5.4.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Apache Phoenix</name>
   <description>A SQL layer over HBase</description>
@@ -31,6 +37,29 @@
 
   <repositories>
     <repository>
+      <id>cdh.repo</id>
+      <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+      <name>Cloudera Repositories</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>cdh.snapshots.repo</id>
+      <url>https://repository.cloudera.com/artifactory/libs-snapshot-local</url>
+      <name>Cloudera Snapshots Repository</name>
+      <snapshots>
+        <enabled>true</enabled>
+        </snapshots>
+        <releases>
+          <enabled>false</enabled>
+        </releases>
+    </repository>
+    <repository>
+      <id>cloudbees netty</id>
+      <url>http://repository-netty.forge.cloudbees.com/snapshot/</url>
+    </repository>
+    <repository>
       <id>apache release</id>
       <url>https://repository.apache.org/content/repositories/releases/</url>
     </repository>
@@ -55,12 +84,6 @@
     </repository>
   </repositories>
 
-  <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>14</version>
-  </parent>
-
   <scm>
     <connection>scm:git:http://git-wip-us.apache.org/repos/asf/phoenix.git</connection>
     <url>https://git-wip-us.apache.org/repos/asf/phoenix.git</url>
@@ -74,12 +97,13 @@
     <test.output.tofile>true</test.output.tofile>
 
     <!-- Hadoop Versions -->
-    <hbase.version>1.0.1-SNAPSHOT</hbase.version>
-    <hadoop-two.version>2.5.1</hadoop-two.version>
+    <hadoop-two.mr1.version>${cdh.mr1.version}</hadoop-two.mr1.version>
+    <hbase.version>${cdh.hbase.version}</hbase.version>
+    <hadoop-two.version>${cdh.hadoop.version}</hadoop-two.version>
+
 
     <!-- Dependency versions -->
     <commons-cli.version>1.2</commons-cli.version>
-    <hadoop.version>2.5.1</hadoop.version>
     <pig.version>0.12.0</pig.version>
     <jackson.version>1.8.8</jackson.version>
     <antlr.version>3.5</antlr.version>
@@ -100,7 +124,7 @@
     <snappy.version>0.3</snappy.version>
     <netty.version>4.0.23.Final</netty.version>
     <commons-codec.version>1.7</commons-codec.version>
-    <htrace.version>3.1.0-incubating</htrace.version>
+    <htrace.version>3.0.4</htrace.version>
     <collections.version>3.2.1</collections.version>
     <jodatime.version>2.3</jodatime.version>
 
@@ -498,7 +522,7 @@
       <dependency>
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-minicluster</artifactId>
-        <version>${hadoop-two.version}</version>
+        <version>${hadoop-two.mr1.version}</version>
         <optional>true</optional>
         <scope>test</scope>
       </dependency>
@@ -625,7 +649,7 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.htrace</groupId>
+        <groupId>org.htrace</groupId>
         <artifactId>htrace-core</artifactId>
         <version>${htrace.version}</version>
       </dependency>

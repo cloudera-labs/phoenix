@@ -47,7 +47,9 @@
         <include>sqlline:sqlline</include>
         <include>org.apache.hbase:hbase*</include>
         <include>org.apache.htrace:htrace-core</include>
+        <include>org.htrace:htrace-core</include>
         <include>io.netty:netty-all</include>
+        <include>io.netty:netty</include>
         <include>commons-codec:commons-codec</include>
       </includes>
     </dependencySet>
