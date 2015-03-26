@@ -383,6 +383,13 @@ public class IndexHalfStoreFileReader extends StoreFile.Reader {
             public boolean isSeeked() {
                 return this.delegate.isSeeked();
             }
+
+            // Added for compatibility with HBASE-13109
+            // Once we drop support for older versions, add an @override annotation here
+            // and figure out how to get the next indexed key
+            public Cell getNextIndexedKey() {
+                return null; // indicate that we cannot use the optimization
+            }
         };
     }
 
