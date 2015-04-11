@@ -288,7 +288,7 @@ public class IndexSplitTransaction extends SplitTransaction {
       if (metaEntries == null || metaEntries.isEmpty()) {
         MetaTableAccessor.splitRegion(server.getConnection(), parent.getRegionInfo(),
                 daughterRegions.getFirst().getRegionInfo(),
-                daughterRegions.getSecond().getRegionInfo(), server.getServerName());
+                daughterRegions.getSecond().getRegionInfo(), server.getServerName(), 1);
       } else {
         offlineParentInMetaAndputMetaEntries(server.getConnection(),
           parent.getRegionInfo(), daughterRegions.getFirst().getRegionInfo(), daughterRegions

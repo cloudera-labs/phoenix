@@ -33,7 +33,6 @@ import org.apache.htrace.HTraceConfiguration;
 import org.apache.phoenix.call.CallRunner;
 import org.apache.phoenix.call.CallWrapper;
 import org.apache.phoenix.jdbc.PhoenixConnection;
-import org.apache.phoenix.parse.TraceStatement;
 import org.apache.phoenix.query.QueryServices;
 import org.apache.phoenix.query.QueryServicesOptions;
 import org.apache.phoenix.trace.TraceMetricSource;
@@ -132,19 +131,6 @@ public class Tracing {
         String tracelevel = conf.get(QueryServices.TRACING_FREQ_ATTRIB, QueryServicesOptions.DEFAULT_TRACING_FREQ);
         return getSampler(tracelevel, new ConfigurationAdapter.HadoopConfigConfigurationAdapter(
                 conf));
-    }
-
-    public static Sampler<?> getConfiguredSampler(TraceStatement traceStatement) {
-      double samplingRate = traceStatement.getSamplingRate();
-      if (samplingRate >= 1.0) {
-          return Sampler.ALWAYS;
-      } else if (samplingRate < 1.0 && samplingRate > 0.0) {
-          Map<String, String> items = new HashMap<String, String>();
-          items.put(ProbabilitySampler.SAMPLER_FRACTION_CONF_KEY, Double.toString(samplingRate));
-          return new ProbabilitySampler(HTraceConfiguration.fromMap(items));
-      } else {
-          return Sampler.NEVER;
-      }
     }
 
     private static Sampler<?> getSampler(String traceLevel, ConfigurationAdapter conf) {
