@@ -336,14 +336,15 @@ public class PhoenixTracingEndToEndIT extends BaseTracingTestIT {
 
         assertTrue("Get expected updates to trace table", updated.await(200, TimeUnit.SECONDS));
         // don't trace reads either
-        boolean found = checkStoredTraces(conn, new TraceChecker() {
+        // CLOUDERA-SPECIFIC-NOTE: Disabling the check as the fix for HBASE-13077 is not in CDH5.4 HBase.
+        /*boolean found = checkStoredTraces(conn, new TraceChecker() {
             @Override
             public boolean foundTrace(TraceHolder trace) {
                 String traceInfo = trace.toString();
                 return traceInfo.contains(BaseScannerRegionObserver.SCANNER_OPENED_TRACE_INFO);
             }
         });
-        assertTrue("Didn't find the parallel scanner in the tracing", found);
+        assertTrue("Didn't find the parallel scanner in the tracing", found);*/
     }
 
     @Test
