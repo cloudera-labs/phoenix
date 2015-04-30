@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.cloudera.cdh</groupId>
-    <artifactId>cdh-root</artifactId>
-    <version>5.4.0</version>
+    <artifactId>phoenix-root</artifactId>
+    <version>1.0.0</version>
     <relativePath/>
   </parent>
   <groupId>org.apache.phoenix</groupId>
