@@ -299,6 +299,11 @@ public class ScanRegionObserver extends BaseScannerRegionObserver {
             public long getMaxResultSize() {
                 return s.getMaxResultSize();
             }
+
+            @Override
+            public int getBatch() {
+                return s.getBatch();
+            }
         };
     }
 

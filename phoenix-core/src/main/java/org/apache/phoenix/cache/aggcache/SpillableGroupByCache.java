@@ -377,6 +377,11 @@ public class SpillableGroupByCache implements GroupByCache {
             public long getMaxResultSize() {
               return s.getMaxResultSize();
             }
+
+            @Override
+            public int getBatch() {
+                return s.getBatch();
+            }
         };
     }
 }

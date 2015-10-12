@@ -24,6 +24,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.DoNotRetryIOException;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
+import org.apache.hadoop.hbase.regionserver.ScannerContext;
 
 public abstract class BaseRegionScanner implements RegionScanner {
 
@@ -36,7 +37,7 @@ public abstract class BaseRegionScanner implements RegionScanner {
     public abstract boolean next(List<Cell> results) throws IOException;
 
     @Override
-    public boolean next(List<Cell> result, int limit) throws IOException {
+    public boolean next(List<Cell> result, ScannerContext scannerContext) throws IOException {
         return next(result);
     }
     
@@ -56,7 +57,7 @@ public abstract class BaseRegionScanner implements RegionScanner {
     }
 
     @Override
-    public boolean nextRaw(List<Cell> result, int limit) throws IOException {
-        return next(result, limit);
+    public boolean nextRaw(List<Cell> result, ScannerContext scannerContext) throws IOException {
+        return next(result, scannerContext);
     }
 }

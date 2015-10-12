@@ -37,6 +37,7 @@ import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.regionserver.HRegion;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
+import org.apache.hadoop.hbase.regionserver.ScannerContext;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.htrace.Span;
 import org.apache.htrace.Trace;
@@ -264,11 +265,11 @@ abstract public class BaseScannerRegionObserver extends BaseRegionObserver {
             }
 
             @Override
-            public boolean next(List<Cell> result, int limit) throws IOException {
+            public boolean next(List<Cell> result, ScannerContext scannerContext) throws IOException {
                 try {
-                    return s.next(result, limit);
+                    return s.next(result, scannerContext);
                 } catch (Throwable t) {
-                    ServerUtil.throwIOException(c.getEnvironment().getRegion().getRegionNameAsString(), t);
+                    ServerUtil.throwIOException(c.getEnvironment().getRegion().getRegionInfo().getRegionNameAsString(), t);
                     return false; // impossible
                 }
             }
@@ -330,34 +331,31 @@ abstract public class BaseScannerRegionObserver extends BaseRegionObserver {
             }
 
             @Override
-            public boolean nextRaw(List<Cell> result, int limit) throws IOException {
-                try {
-                    boolean next = s.nextRaw(result, limit);
-                    Cell arrayElementCell = null;
-                    if (result.size() == 0) {
-                        return next;
-                    }
-                    if (arrayFuncRefs != null && arrayFuncRefs.length > 0 && arrayKVRefs.size() > 0) {
-                        int arrayElementCellPosition = replaceArrayIndexElement(arrayKVRefs, arrayFuncRefs, result);
-                        arrayElementCell = result.get(arrayElementCellPosition);
-                    }
-                    if ((offset > 0 || ScanUtil.isLocalIndex(scan))  && !ScanUtil.isAnalyzeTable(scan)) {
-                        IndexUtil.wrapResultUsingOffset(c, result, offset, dataColumns,
-                            tupleProjector, dataRegion, indexMaintainer, viewConstants, ptr);
-                    }
-                    if (projector != null) {
-                        Tuple tuple = projector.projectResults(new ResultTuple(Result.create(result)));
-                        result.clear();
-                        result.add(tuple.getValue(0));
-                        if(arrayElementCell != null)
-                            result.add(arrayElementCell);
-                    }
-                    // There is a scanattribute set to retrieve the specific array element
+            public boolean nextRaw(List<Cell> result, ScannerContext scannerContext)
+                throws IOException {
+              try {
+                boolean next = s.nextRaw(result, scannerContext);
+                if (result.size() == 0) {
                     return next;
-                } catch (Throwable t) {
-                    ServerUtil.throwIOException(c.getEnvironment().getRegion().getRegionNameAsString(), t);
-                    return false; // impossible
                 }
+                if (arrayFuncRefs != null && arrayFuncRefs.length > 0 && arrayKVRefs.size() > 0) {
+                    replaceArrayIndexElement(arrayKVRefs, arrayFuncRefs, result);
+                }
+                if ((offset > 0 || ScanUtil.isLocalIndex(scan))  && !ScanUtil.isAnalyzeTable(scan)) {
+                    IndexUtil.wrapResultUsingOffset(c, result, offset, dataColumns,
+                        tupleProjector, dataRegion, indexMaintainer, viewConstants, ptr);
+                }
+                if (projector != null) {
+                    Tuple tuple = projector.projectResults(new ResultTuple(Result.create(result)));
+                    result.clear();
+                    result.add(tuple.getValue(0));
+                }
+                // There is a scanattribute set to retrieve the specific array element
+                return next;
+              } catch (Throwable t) {
+                ServerUtil.throwIOException(c.getEnvironment().getRegion().getRegionInfo().getRegionNameAsString(), t);
+                return false; // impossible
+              }
             }
 
             private int replaceArrayIndexElement(final Set<KeyValueColumnExpression> arrayKVRefs,
@@ -397,6 +395,11 @@ abstract public class BaseScannerRegionObserver extends BaseRegionObserver {
             @Override
             public long getMaxResultSize() {
                 return s.getMaxResultSize();
+            }
+
+            @Override
+            public int getBatch() {
+                return s.getBatch();
             }
         };
     }

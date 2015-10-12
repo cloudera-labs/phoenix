@@ -343,6 +343,11 @@ public class GroupedAggregateRegionObserver extends BaseScannerRegionObserver {
                 public long getMaxResultSize() {
                 	return s.getMaxResultSize();
                 }
+
+                @Override
+                public int getBatch() {
+                    return s.getBatch();
+                }
             };
         }
 
@@ -563,6 +568,11 @@ public class GroupedAggregateRegionObserver extends BaseScannerRegionObserver {
             @Override
             public long getMaxResultSize() {
                 return scanner.getMaxResultSize();
+            }
+
+            @Override
+            public int getBatch() {
+                return scanner.getBatch();
             }
         };
     }

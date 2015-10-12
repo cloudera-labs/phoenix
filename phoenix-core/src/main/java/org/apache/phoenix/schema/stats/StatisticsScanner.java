@@ -28,6 +28,7 @@ import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.regionserver.HRegion;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
+import org.apache.hadoop.hbase.regionserver.ScannerContext;
 import org.apache.phoenix.hbase.index.util.ImmutableBytesPtr;
 
 /**
@@ -58,8 +59,8 @@ public class StatisticsScanner implements InternalScanner {
     }
 
     @Override
-    public boolean next(List<Cell> result, int limit) throws IOException {
-        boolean ret = delegate.next(result, limit);
+    public boolean next(List<Cell> result, ScannerContext scannerContext) throws IOException {
+        boolean ret = delegate.next(result, scannerContext);
         updateStat(result);
         return ret;
     }

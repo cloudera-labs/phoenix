@@ -288,7 +288,7 @@ public class IndexSplitTransaction extends SplitTransaction {
       if (metaEntries == null || metaEntries.isEmpty()) {
         MetaTableAccessor.splitRegion(server.getConnection(), parent.getRegionInfo(),
                 daughterRegions.getFirst().getRegionInfo(),
-                daughterRegions.getSecond().getRegionInfo(), server.getServerName());
+                daughterRegions.getSecond().getRegionInfo(), server.getServerName(), 1);
       } else {
         offlineParentInMetaAndputMetaEntries(server.getConnection(),
           parent.getRegionInfo(), daughterRegions.getFirst().getRegionInfo(), daughterRegions
@@ -595,7 +595,7 @@ public class IndexSplitTransaction extends SplitTransaction {
     Put putParent = MetaTableAccessor.makePutFromRegionInfo(copyOfParent);
     MetaTableAccessor.addDaughtersToPut(putParent, splitA, splitB);
     mutations.add(putParent);
-    
+
     //Puts for daughters
     Put putA = MetaTableAccessor.makePutFromRegionInfo(splitA);
     Put putB = MetaTableAccessor.makePutFromRegionInfo(splitB);
@@ -971,7 +971,7 @@ public class IndexSplitTransaction extends SplitTransaction {
     return ZKAssign.transitionNode(zkw, parent, serverName,
       beginState, endState, znodeVersion, payload);
   }
-  
+
   public HRegion getParent() {
     return this.parent;
   }
