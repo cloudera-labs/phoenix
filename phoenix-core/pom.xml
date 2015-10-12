@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.apache.phoenix</groupId>
     <artifactId>phoenix</artifactId>
-    <version>4.5.2-HBase-1.0</version>
+    <version>4.5.2-clabs-phoenix-1.2.0-SNAPSHOT</version>
   </parent>
   <artifactId>phoenix-core</artifactId>
   <name>Phoenix Core</name>
@@ -124,8 +124,8 @@
           <outputDirectory>${antlr-output.dir}/org/apache/phoenix/parse</outputDirectory>
         </configuration>
       </plugin>
-      <!-- Run with -Dmaven.test.skip.exec=true to build -tests.jar without running 
-        tests (this is needed for upstream projects whose tests need this jar simply for 
+      <!-- Run with -Dmaven.test.skip.exec=true to build -tests.jar without running
+        tests (this is needed for upstream projects whose tests need this jar simply for
         compilation) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -147,8 +147,8 @@
           </execution>
         </executions>
         <configuration>
-          <!-- Exclude these 2 packages, because their dependency _binary_ files 
-            include the sources, and Maven 2.2 appears to add them to the sources to compile, 
+          <!-- Exclude these 2 packages, because their dependency _binary_ files
+            include the sources, and Maven 2.2 appears to add them to the sources to compile,
             weird -->
           <excludes>
             <exclude>org/apache/jute/**</exclude>
@@ -195,7 +195,7 @@
               </descriptors>
             </configuration>
           </execution>
-        </executions>      
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -296,7 +296,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
+      <version>${cdh.slf4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.iq80.snappy</groupId>

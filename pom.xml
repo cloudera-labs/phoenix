@@ -1,9 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.cloudera.cdh</groupId>
+    <artifactId>phoenix-root</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+    <relativePath/>
+  </parent>
+
   <groupId>org.apache.phoenix</groupId>
   <artifactId>phoenix</artifactId>
-  <version>4.5.2-HBase-1.0</version>
+  <version>4.5.2-clabs-phoenix-1.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Apache Phoenix</name>
   <description>A SQL layer over HBase</description>
@@ -35,6 +42,29 @@
 
   <repositories>
     <repository>
+      <id>cdh.repo</id>
+      <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+      <name>Cloudera Repositories</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>cdh.snapshots.repo</id>
+      <url>https://repository.cloudera.com/artifactory/libs-snapshot-local</url>
+      <name>Cloudera Snapshots Repository</name>
+      <snapshots>
+        <enabled>true</enabled>
+        </snapshots>
+        <releases>
+          <enabled>false</enabled>
+        </releases>
+    </repository>
+    <repository>
+      <id>cloudbees netty</id>
+      <url>http://repository-netty.forge.cloudbees.com/snapshot/</url>
+    </repository>
+    <repository>
       <id>apache release</id>
       <url>https://repository.apache.org/content/repositories/releases/</url>
     </repository>
@@ -59,12 +89,6 @@
     </repository>
   </repositories>
 
-  <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>14</version>
-  </parent>
-
   <scm>
     <connection>scm:git:http://git-wip-us.apache.org/repos/asf/phoenix.git</connection>
     <url>https://git-wip-us.apache.org/repos/asf/phoenix.git</url>
@@ -79,13 +103,13 @@
     <top.dir>${project.basedir}</top.dir>
 
     <!-- Hadoop Versions -->
-    <hbase.version>1.0.1</hbase.version>
-    <hadoop-two.version>2.5.1</hadoop-two.version>
+    <hbase.version>${cdh.hbase.version}</hbase.version>
+    <hadoop-two.mr1.version>${cdh.mr1.version}</hadoop-two.mr1.version>
+    <hadoop-two.version>${cdh.hadoop.version}</hadoop-two.version>
 
     <!-- Dependency versions -->
     <commons-cli.version>1.2</commons-cli.version>
-    <hadoop.version>2.5.1</hadoop.version>
-    <pig.version>0.13.0</pig.version>
+    <pig.version>${cdh.pig.version}</pig.version>
     <jackson.version>1.8.8</jackson.version>
     <antlr.version>3.5</antlr.version>
     <log4j.version>1.2.17</log4j.version>
@@ -99,7 +123,7 @@
     <sqlline.version>1.1.8</sqlline.version>
     <guava.version>12.0.1</guava.version>
     <jackson.version>1.8.8</jackson.version>
-    <flume.version>1.4.0</flume.version>
+    <flume.version>${cdh.flume-ng.version}</flume.version>
     <findbugs.version>1.3.2</findbugs.version>
     <jline.version>2.11</jline.version>
     <snappy.version>0.3</snappy.version>
@@ -120,15 +144,15 @@
     <maven-build-helper-plugin.version>1.9.1</maven-build-helper-plugin.version>
     <maven-surefire-plugin.version>2.18</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.18</maven-failsafe-plugin.version>
-    
+
     <maven-dependency-plugin.version>2.1</maven-dependency-plugin.version>
     <maven.assembly.version>2.5.2</maven.assembly.version>
     <maven.rat.version>0.8</maven.rat.version>
-    
+
     <!-- Plugin options -->
     <numForkedUT>3</numForkedUT>
     <numForkedIT>5</numForkedIT>
-    
+
     <!-- Set default encoding so multi-byte tests work correctly on the Mac -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -146,7 +170,7 @@
             <target>1.7</target>
           </configuration>
         </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings 
+        <!--This plugin's configuration is used to store Eclipse m2e settings
           only. It has no influence on the Maven build itself. -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -394,7 +418,7 @@
         <configuration>
           <forkCount>${numForkedUT}</forkCount>
           <reuseForks>true</reuseForks>
-          <argLine>-enableassertions -Xmx2250m -XX:MaxPermSize=128m 
+          <argLine>-enableassertions -Xmx2250m -XX:MaxPermSize=128m
             -Djava.security.egd=file:/dev/./urandom "-Djava.library.path=${hadoop.library.path}${path.separator}${java.library.path}"</argLine>
           <redirectTestOutputToFile>${test.output.tofile}</redirectTestOutputToFile>
         </configuration>
@@ -557,7 +581,7 @@
       <dependency>
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-minicluster</artifactId>
-        <version>${hadoop-two.version}</version>
+        <version>${hadoop-two.mr1.version}</version>
         <optional>true</optional>
         <scope>test</scope>
       </dependency>
@@ -567,7 +591,6 @@
         <groupId>org.apache.pig</groupId>
         <artifactId>pig</artifactId>
         <version>${pig.version}</version>
-        <classifier>h2</classifier>
         <exclusions>
           <exclusion>
             <groupId>org.xerial.snappy</groupId>
