@@ -33,6 +33,7 @@ import org.apache.phoenix.jdbc.PhoenixConnection;
 import org.apache.phoenix.metrics.MetricInfo;
 import org.apache.phoenix.query.QueryServices;
 import org.apache.phoenix.query.QueryServicesOptions;
+import org.apache.phoenix.trace.TracingUtils;
 import org.apache.phoenix.util.LogUtil;
 import org.apache.htrace.Span;
 
@@ -126,7 +127,7 @@ public class TraceReader {
 
             // search the spans to determine the if we have a known parent
             SpanInfo parentSpan = null;
-            if (parent != Span.ROOT_SPAN_ID) {
+            if (parent != TracingUtils.ROOT_SPAN_ID) {
                 // find the parent
                 for (SpanInfo p : trace.spans) {
                     if (p.id == parent) {
@@ -156,10 +157,9 @@ public class TraceReader {
             if (parentSpan != null) {
                 // add this as a child to the parent span
                 parentSpan.children.add(spanInfo);
-            } else if (parent != Span.ROOT_SPAN_ID) {
+            } else if (parent != TracingUtils.ROOT_SPAN_ID) {
                 // add the span to the orphan pile to check for the remaining spans we see
-                LOG.info(addCustomAnnotations("No parent span found for span: " + span + " (root span id: "
-                        + Span.ROOT_SPAN_ID + ")"));
+                LOG.info(addCustomAnnotations("No parent span found for span: " + span));
                 orphans.add(spanInfo);
             }
 
@@ -334,9 +334,9 @@ public class TraceReader {
         @Override
         public int compareTo(SpanInfo o) {
             // root span always comes first
-            if (this.parentId == Span.ROOT_SPAN_ID) {
+            if (this.parentId == TracingUtils.ROOT_SPAN_ID) {
                 return -1;
-            } else if (o.parentId == Span.ROOT_SPAN_ID) {
+            } else if (o.parentId == TracingUtils.ROOT_SPAN_ID) {
                 return 1;
             }
 
@@ -356,7 +356,7 @@ public class TraceReader {
             sb.append("\tdescription=" + description);
             sb.append("\n");
             sb.append("\tparent="
-                    + (parent == null ? (parentId == Span.ROOT_SPAN_ID ? "ROOT" : "[orphan - id: "
+                    + (parent == null ? (parentId == TracingUtils.ROOT_SPAN_ID ? "ROOT" : "[orphan - id: "
                             + parentId + "]") : parent.id));
             sb.append("\n");
             sb.append("\tstart,end=" + start + "," + end);

@@ -19,7 +19,6 @@ package org.apache.phoenix.iterate;
 
 import static org.apache.phoenix.iterate.TableResultIterator.RenewLeaseStatus.CLOSED;
 import static org.apache.phoenix.iterate.TableResultIterator.RenewLeaseStatus.NOT_RENEWED;
-import static org.apache.phoenix.iterate.TableResultIterator.RenewLeaseStatus.RENEWED;
 import static org.apache.phoenix.iterate.TableResultIterator.RenewLeaseStatus.THRESHOLD_NOT_REACHED;
 import static org.apache.phoenix.iterate.TableResultIterator.RenewLeaseStatus.UNINITIALIZED;
 
@@ -29,7 +28,6 @@ import java.util.List;
 
 import javax.annotation.concurrent.GuardedBy;
 
-import org.apache.hadoop.hbase.client.AbstractClientScanner;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.phoenix.execute.MutationState;
@@ -143,15 +141,7 @@ public class TableResultIterator implements ResultIterator {
         if (delay < renewLeaseThreshold) {
             return THRESHOLD_NOT_REACHED;
         }
-        if (scanIterator instanceof ScanningResultIterator
-                && ((ScanningResultIterator)scanIterator).getScanner() instanceof AbstractClientScanner) {
-            // Need this explicit cast because HBase's ResultScanner doesn't have this method exposed.
-            boolean leaseRenewed = ((AbstractClientScanner)((ScanningResultIterator)scanIterator).getScanner()).renewLease();
-            if (leaseRenewed) {
-                renewLeaseTime = now();
-                return RENEWED;
-            }
-        }
+        // This version of CDH HBase does not include a scanner iterator that supports lease renewal
         return NOT_RENEWED;
     }
 
