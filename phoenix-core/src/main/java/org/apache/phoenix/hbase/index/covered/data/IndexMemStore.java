@@ -33,6 +33,7 @@ import org.apache.hadoop.hbase.regionserver.IndexKeyValueSkipListSet;
 import org.apache.hadoop.hbase.regionserver.KeyValueScanner;
 import org.apache.hadoop.hbase.regionserver.MemStore;
 import org.apache.hadoop.hbase.regionserver.NonLazyKeyValueScanner;
+import org.apache.hadoop.hbase.regionserver.Store;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import org.apache.phoenix.hbase.index.covered.KeyValueStore;
@@ -311,7 +312,7 @@ public class IndexMemStore implements KeyValueStore {
     }
     
     @Override
-    public boolean shouldUseScanner(Scan scan, SortedSet<byte[]> columns, long oldestUnexpiredTS) {
+    public boolean shouldUseScanner(Scan scan, Store store, long oldestUnexpiredTS) {
       throw new UnsupportedOperationException(this.getClass().getName()
           + " doesn't support checking to see if it should use a scanner!");
     }
