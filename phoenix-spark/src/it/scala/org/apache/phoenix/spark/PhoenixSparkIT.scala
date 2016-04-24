@@ -177,7 +177,8 @@ class PhoenixSparkIT extends FunSuite with Matchers with BeforeAndAfterAll {
     count shouldEqual 1L
   }
 
-  test("Using a predicate referring to a non-existent column should fail") {
+  /* ignored due to PHOENIX-2985 */
+  ignore("Using a predicate referring to a non-existent column should fail") {
     intercept[Exception] {
       val sqlContext = new SQLContext(sc)
 
