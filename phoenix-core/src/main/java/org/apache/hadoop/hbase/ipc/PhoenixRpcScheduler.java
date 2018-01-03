@@ -106,6 +106,21 @@ public class PhoenixRpcScheduler extends RpcScheduler {
     }
 
     @Override
+    public int getReadQueueLength() {
+        return this.delegate.getReadQueueLength();
+    }
+
+    @Override
+    public int getScanQueueLength() {
+        return this.delegate.getScanQueueLength();
+    }
+
+    @Override
+    public int getWriteQueueLength() {
+        return this.delegate.getWriteQueueLength();
+    }
+
+    @Override
     public int getReplicationQueueLength() {
         return this.delegate.getReplicationQueueLength();
     }
@@ -113,6 +128,21 @@ public class PhoenixRpcScheduler extends RpcScheduler {
     @Override
     public int getActiveRpcHandlerCount() {
         return this.delegate.getActiveRpcHandlerCount() + this.indexCallExecutor.getActiveHandlerCount() + this.metadataCallExecutor.getActiveHandlerCount();
+    }
+
+    @Override
+    public int getActiveReadRpcHandlerCount() {
+        return this.delegate.getActiveReadRpcHandlerCount();
+    }
+
+    @Override
+    public int getActiveScanRpcHandlerCount() {
+        return this.delegate.getActiveScanRpcHandlerCount();
+    }
+
+    @Override
+    public int getActiveWriteRpcHandlerCount() {
+        return this.delegate.getActiveWriteRpcHandlerCount();
     }
 
     @VisibleForTesting

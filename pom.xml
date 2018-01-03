@@ -5,7 +5,7 @@
     <groupId>com.cloudera.cdh</groupId>
     <artifactId>phoenix-root</artifactId>
     <version>1.3.0</version>
-    <relativePath/>
+    <relativePath>phoenix-root.pom.xml</relativePath>
   </parent>
 
   <groupId>org.apache.phoenix</groupId>

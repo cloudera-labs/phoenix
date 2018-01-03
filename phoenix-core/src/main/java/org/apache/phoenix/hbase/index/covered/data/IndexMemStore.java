@@ -302,11 +302,16 @@ public class IndexMemStore implements KeyValueStore {
       this.kvsetItRow = null;
     }
 
+    @Override
+    public long getScannerOrder() {
+        return this.getScannerOrder();
+    }
+
     /**
      * MemStoreScanner returns max value as sequence id because it will always have the latest data
      * among all files.
      */
-    @Override
+//    @Override
     public long getSequenceID() {
       return Long.MAX_VALUE;
     }

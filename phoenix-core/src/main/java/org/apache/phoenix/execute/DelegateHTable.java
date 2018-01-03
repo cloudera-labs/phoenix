@@ -46,6 +46,7 @@ import com.google.protobuf.Message;
 import com.google.protobuf.Service;
 import com.google.protobuf.ServiceException;
 
+@SuppressWarnings("deprecation")
 public class DelegateHTable implements HTableInterface {
     protected final HTableInterface delegate;
 
@@ -121,6 +122,28 @@ public class DelegateHTable implements HTableInterface {
     @Override
     public Result getRowOrBefore(byte[] row, byte[] family) throws IOException {
         return delegate.getRowOrBefore(row, family);
+    }
+
+    @Override
+    public int getOperationTimeout() {
+        return delegate.getOperationTimeout();
+    }
+
+    @Override
+    public void setOperationTimeout(int operationTimeout) {
+//        delegate.setOperationTimeout(operationTimeout);
+    	;
+    }
+
+    @Override
+    public int getRpcTimeout() {
+        return delegate.getRpcTimeout();
+    }
+
+    @Override
+    public void setRpcTimeout(int rpcTimeout) {
+//        delegate.setRpcTimeout(rpcTimeout);
+    	;
     }
 
     @Override

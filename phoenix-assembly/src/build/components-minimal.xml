@@ -39,7 +39,9 @@
       <outputDirectory>/</outputDirectory>
       <unpack>true</unpack>
       <includes>
+        <include>co.cask.tephra:tephra*</include>
         <include>org.apache.phoenix:phoenix-*</include>
+        <include>org.apache.twill:twill*</include>
         <include>org.iq80.snappy:snappy</include>
       </includes>
       <excludes>

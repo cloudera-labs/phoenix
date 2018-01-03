@@ -119,8 +119,14 @@ public class FilteredKeyValueScanner implements KeyValueScanner {
     }
 
     @Override
+    public long getScannerOrder() {
+        return this.delegate.getScannerOrder();
+    }
+
+//    @Override
     public long getSequenceID() {
-        return this.delegate.getSequenceID();
+//        return this.delegate.getSequenceID();
+    	return 0L;
     }
 
     @Override

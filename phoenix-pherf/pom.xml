@@ -15,7 +15,8 @@
 	<parent>
 		<groupId>org.apache.phoenix</groupId>
 		<artifactId>phoenix</artifactId>
-                <version>4.7.0-clabs-phoenix1.3.0</version>
+        <version>4.7.0-clabs-phoenix1.3.0</version>
+        <relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>phoenix-pherf</artifactId>
